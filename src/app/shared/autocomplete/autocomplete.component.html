@@ -1,34 +1,38 @@
 <div class="autocomplete-wrapper" #autocompleteWrapper>
-    <!-- input -->
-    <input
-            type="text"
-            [formControl]="searchControl"
-            placeholder="Search..."
-            class="autocomplete-input"
-    />
+  <!-- input -->
+  <input
+    type="text"
+    [formControl]="searchControl"
+    placeholder="Search..."
+    class="autocomplete-input"
+  />
 
-    <ng-container *ngIf="suggestions$ | async as suggestions">
-        <ul class="autocomplete-suggestions-dropdown" *ngIf="showSearches">
-            <!-- loading message -->
-            <li class="autocomplete-suggestions-dropdown-item loading-no-results" *ngIf="suggestionsLoading">
-                Loading...
-            </li>
+  <ng-container *ngIf="suggestions$ | async as suggestions">
+    <ul class="autocomplete-suggestions-dropdown" *ngIf="showSearches">
+      <!-- loading message -->
+      <li class="autocomplete-suggestions-dropdown-item loading-no-results"
+          *ngIf="suggestionsLoading; else suggestionsTemplate">
+        Loading...
+      </li>
 
-            <ng-container *ngIf="suggestions.length > 0; else noResultsItem">
-                <!-- suggestion item -->
-                <li *ngFor="let suggestion of suggestions"
-                    class="autocomplete-suggestions-dropdown-item">
-                  <button (click)="onSelect(suggestion)" class="item-button">{{ suggestion }}</button>
-                </li>
-            </ng-container>
+      <!-- suggestions -->
+      <ng-template #suggestionsTemplate>
+        <ng-container *ngIf="suggestions.length > 0; else noResultsItem">
+          <!-- suggestion item -->
+          <li *ngFor="let suggestion of suggestions"
+              class="autocomplete-suggestions-dropdown-item">
+            <button (click)="onSelect(suggestion)" class="item-button">{{ suggestion }}</button>
+          </li>
+        </ng-container>
+      </ng-template>
 
-            <!-- no results -->
-            <ng-template #noResultsItem>
-                <li *ngIf="searchControl.value?.length > 0"
-                    class="autocomplete-suggestions-dropdown-item loading-no-results">
-                    No results found
-                </li>
-            </ng-template>
-        </ul>
-    </ng-container>
+      <!-- no results -->
+      <ng-template #noResultsItem>
+        <li *ngIf="searchControl.value?.length > 0"
+            class="autocomplete-suggestions-dropdown-item loading-no-results">
+          No results found
+        </li>
+      </ng-template>
+    </ul>
+  </ng-container>
 </div>

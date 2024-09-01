@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, of} from "rxjs";
+import {delay, Observable, of} from "rxjs";
 import {User} from "../../../api/models/user.model";
 
 @Injectable()
@@ -12,6 +12,6 @@ export class FilterBrownHairUsersService {
         return user.firstName.toLowerCase().includes(queryFirstName.toLowerCase()) &&
           user.lastName.toLowerCase().includes(queryLastName.toLowerCase())
       }
-    ) || []);
+    ) || []).pipe(delay(1000));
   }
 }

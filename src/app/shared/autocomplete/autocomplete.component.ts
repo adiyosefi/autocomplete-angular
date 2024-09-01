@@ -1,7 +1,7 @@
 import {Component, EventEmitter, ElementRef, Input, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {catchError, debounceTime, distinctUntilChanged, Observable, tap, of, switchMap} from "rxjs";
+import {catchError, debounceTime, distinctUntilChanged, Observable, tap, of, switchMap, finalize} from "rxjs";
 
 @Component({
   selector: 'app-autocomplete',
@@ -31,7 +31,7 @@ export class AutocompleteComponent implements OnInit {
   // dropdown
   showSearches: boolean = false;
   suggestionsLoading: boolean = false;
-  suggestions$: Observable<string[]> = of([]);
+  suggestions$!: Observable<string[]>;
 
   @ViewChild('autocompleteWrapper', {static: true}) autocompleteWrapper!: ElementRef;
 
@@ -51,15 +51,12 @@ export class AutocompleteComponent implements OnInit {
         this.suggestionsLoading = true;
         this.showSearches = true;
       }),
-      switchMap((value) =>
+      switchMap(value =>
         this.getSuggestionsCallback(value).pipe(
           catchError(() => of([])), // handle error and return empty array
+          finalize(() => this.suggestionsLoading = false)
         )
       ),
-      tap(() => {
-        this.suggestionsLoading = false;
-        this.showSearches = true;
-      })
     );
   }
 
