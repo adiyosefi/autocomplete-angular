@@ -11,5 +11,5 @@ import {AutocompleteComponent} from "./shared/autocomplete/autocomplete.componen
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'angular-playground';
+  title = 'autocomplete-angular';
 }

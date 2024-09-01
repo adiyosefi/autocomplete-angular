@@ -1,5 +1,5 @@
 {
-  "name": "angular-playground",
+  "name": "autocomplete-angular",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
-    "serve:ssr:angular-playground": "node dist/angular-playground/server/server.mjs"
+    "serve:ssr:autocomplete-angular": "node dist/autocomplete-angular/server/server.mjs"
   },
   "private": true,
   "dependencies": {

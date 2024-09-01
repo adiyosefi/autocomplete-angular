@@ -15,9 +15,9 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have the 'angular-playground' title`, () => {
+  it(`should have the 'autocomplete-angular' title`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-playground');
+    expect(app.title).toEqual('autocomplete-angular');
   });
 });
