@@ -1,0 +1,14 @@
+.app-container {
+  padding: 2rem;
+  height: 100vh;
+  box-sizing: border-box;
+
+  .title {
+    margin-top: 0;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+  }
+}
