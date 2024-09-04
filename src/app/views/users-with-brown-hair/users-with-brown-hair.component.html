@@ -2,4 +2,6 @@
   <h1 class="title">Autocomplete get users with brown hair</h1>
 
   <app-autocomplete (selectedValueChange)="selectedUser = $event" [getSuggestionsCallback]="getUsersNames" />
+
+  <p>Selected user: {{selectedUser}}</p>
 </div>

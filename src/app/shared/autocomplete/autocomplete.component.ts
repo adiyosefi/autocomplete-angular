@@ -1,7 +1,17 @@
-import {Component, EventEmitter, ElementRef, Input, OnInit, Output, Renderer2, ViewChild} from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
 import {FormControl, ReactiveFormsModule} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {catchError, debounceTime, distinctUntilChanged, Observable, tap, of, switchMap, finalize} from "rxjs";
+import {catchError, debounceTime, distinctUntilChanged, finalize, Observable, of, switchMap, tap} from "rxjs";
 
 @Component({
   selector: 'app-autocomplete',
@@ -13,7 +23,8 @@ import {catchError, debounceTime, distinctUntilChanged, Observable, tap, of, swi
     NgForOf
   ],
   templateUrl: './autocomplete.component.html',
-  styleUrls: ['./autocomplete.component.scss']
+  styleUrls: ['./autocomplete.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AutocompleteComponent implements OnInit {
   // suggestions callback
@@ -25,6 +36,9 @@ export class AutocompleteComponent implements OnInit {
   }
   @Output() selectedValueChange: EventEmitter<string> = new EventEmitter<string>();
 
+  // config inputs
+  @Output() debounceTime: number = 500;
+
   // search input
   searchControl: FormControl = new FormControl('');
 
@@ -35,7 +49,7 @@ export class AutocompleteComponent implements OnInit {
 
   @ViewChild('autocompleteWrapper', {static: true}) autocompleteWrapper!: ElementRef;
 
-  constructor(private renderer: Renderer2) {
+  constructor(private renderer: Renderer2, private cdRef: ChangeDetectorRef) {
   }
 
   ngOnInit(): void {
@@ -45,11 +59,12 @@ export class AutocompleteComponent implements OnInit {
 
   getSuggestions(): void {
     this.suggestions$ = this.searchControl.valueChanges.pipe(
-      debounceTime(500),
+      debounceTime(this.debounceTime),
       distinctUntilChanged(),
       tap(() => {
         this.suggestionsLoading = true;
         this.showSearches = true;
+        this.cdRef.markForCheck();
       }),
       switchMap(value =>
         this.getSuggestionsCallback(value).pipe(
@@ -76,6 +91,7 @@ export class AutocompleteComponent implements OnInit {
   private onClickOutside(event: Event) {
     if (!this.autocompleteWrapper.nativeElement.contains(event.target)) {
       this.showSearches = false;
+      this.cdRef.markForCheck();
     }
   }
 
